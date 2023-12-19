@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { LuRefreshCcw } from 'react-icons/lu';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -17,10 +18,11 @@ const StyledHeading = styled.h1`
 `;
 
 const StyledButton = styled.button`
+  display: flex;
   background-color: #4ca4f0;
   color: white;
   padding: 50px 100px;
-  font-size: 50px;
+  font-size: 70px;
   cursor: pointer;
   border: none;
   border-radius: 40px;
@@ -34,35 +36,55 @@ const StyledNumberList = styled.div`
 `;
 
 const StyledNumberItem = styled.div`
+  font-size: 30px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 8px;
-  margin: 4px;
+  padding: 20px;
+  margin: 10px;
+  margin-top: 50px;
 `;
 
 const RandomNumberGenerator = () => {
   const [generateNumbers, setGenerateNumbers] = useState([]);
-  const [randomNumber, setRandomNumber] = useState(generateRandomNumber());
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [intervalId, setIntervalId] = useState(null);
+  const [randomNumber, setRandomNumber] = useState(null);
 
   function generateRandomNumber() {
     let newNumber;
     do {
-      newNumber = Math.floor(Math.random() * 10) + 1;
+      newNumber = Math.floor(Math.random() * 100) + 1;
     } while (generateNumbers.includes(newNumber));
 
     return newNumber;
   }
 
+  const startSpinning = () => {
+    setIsSpinning(true);
+    const id = setInterval(() => {
+      setRandomNumber(generateRandomNumber());
+    }, 100);
+    setIntervalId(id);
+
+    setTimeout(() => {
+      clearInterval(id);
+      setIsSpinning(false);
+      setGenerateNumbers([...generateNumbers, randomNumber]);
+    }, 2000);
+  };
+
   const handleButtonClick = () => {
-    const newNumber = generateRandomNumber();
-    setRandomNumber(newNumber);
-    setGenerateNumbers([...generateNumbers, newNumber].sort((a, b) => a - b));
+    if (!isSpinning) {
+      startSpinning();
+    }
   };
 
   return (
     <StyledContainer>
       <StyledHeading>{randomNumber}</StyledHeading>
-      <StyledButton onClick={handleButtonClick}>새로고침</StyledButton>
+      <StyledButton onClick={handleButtonClick}>
+        <LuRefreshCcw />
+      </StyledButton>
       <StyledNumberList>
         {generateNumbers.map((number, index) => {
           return <StyledNumberItem key={index}>{number}</StyledNumberItem>;
