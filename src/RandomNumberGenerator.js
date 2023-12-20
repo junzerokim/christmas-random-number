@@ -14,7 +14,7 @@ const StyledContainer = styled.div`
 
 const StyledHeading = styled.h1`
   color: white;
-  font-size: 300px;
+  font-size: 500px;
 `;
 
 const StyledButton = styled.button`
@@ -48,7 +48,7 @@ const RandomNumberGenerator = () => {
   const [generateNumbers, setGenerateNumbers] = useState([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
-  const [randomNumber, setRandomNumber] = useState(null);
+  const [randomNumber, setRandomNumber] = useState(0);
 
   function generateRandomNumber() {
     let newNumber;
